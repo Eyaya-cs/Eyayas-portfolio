@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact Me</title>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" type="image/png" href="img/port.svg">
+
+  <!-- Icons & Dependencies -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
+  
+  <!-- EmailJS SDK -->
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+</head>
+<body>
+
+<header>
+  <a href="#" class="logo" style="color: white; padding: 8px 12px; border-radius: 6px;"></a>
+  <div class="bx bx-menu" id="menu-icon"></div>
+  <ul class="navlist">
+    <li><a href="home.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="myskills.html">My Skills</a></li>
+    <li><a href="myprojects.html">My Projects</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+</header>
+
+<!-- Contact Section -->
+<section class="contact" id="contact">
+  <div class="center-text" data-aos="fade-down">
+    <h2>Contact <span>me</span></h2>
+  </div>
+
+  <div class="contact-form" data-aos="zoom-in">
+    <form id="contact-form">
+      <input type="text" name="user_name" placeholder="Enter Your Name" required>
+      <input type="email" name="user_email" placeholder="Email Address..." required>
+      <textarea name="message" cols="30" rows="10" placeholder="Write Message Here." required></textarea>
+      <div id="form-messages"></div>
+      <input type="submit" value="Send Message" class="send-btn">
+    </form>
+  </div>
+</section>
+
+<!-- Footer -->
+<div class="footer">
+  <div class="copyright">
+    <p>© 2025 Eyaya Alemye. All rights reserved.</p>
+  </div>
+  <a href="#home" class="scroll-top">
+    <i class="ri-arrow-up-s-fill"></i>
+  </a>
+</div>
+
+<!-- Scripts -->
+<script>
+  // Mobile Menu Toggle
+  const menu = document.querySelector('#menu-icon');
+  const navlist = document.querySelector('.navlist');
+  const header = document.querySelector('header');
+
+  menu.onclick = () => {
+    menu.classList.toggle('bx-x');
+    navlist.classList.toggle('active');
+  };
+
+  // Close Menu on Scroll
+  window.onscroll = () => {
+    menu.classList.remove('bx-x');
+    navlist.classList.remove('active');
+  };
+
+  // Initialize EmailJS
+  (function() {
+    emailjs.init("d1VUlCCZOmG3nZSt8"); // Your public key
+  })();
+
+  // Contact Form Handling
+  const contactForm = document.getElementById('contact-form');
+  const formMessages = document.getElementById('form-messages');
+
+  contactForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const submitBtn = this.querySelector('.send-btn');
+    
+    // Disable button during submission
+    submitBtn.disabled = true;
+    submitBtn.value = 'Sending...';
+
+    emailjs.sendForm("service_mf252cr", "template_z9vr6nr", this)
+      .then(() => {
+        formMessages.textContent = "Message sent successfully! 🎉";
+        formMessages.className = 'success';
+        contactForm.reset();
+      })
+      .catch((error) => {
+        formMessages.textContent = `Error: ${error.text || 'Please try again later.'}`;
+        formMessages.className = 'error';
+      })
+      .finally(() => {
+        formMessages.style.display = 'block';
+        submitBtn.disabled = false;
+        submitBtn.value = 'Send Message';
+        
+        // Hide message after 5 seconds
+        setTimeout(() => {
+          formMessages.style.display = 'none';
+        }, 5000);
+      });
+  });
+
+  // Sticky Header
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('sticky', window.scrollY > 120);
+  });
+</script>
+
+
+</body>
+</html>
